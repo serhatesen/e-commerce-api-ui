@@ -1,0 +1,84 @@
+<template>
+  <div>
+    <clothing-bar/>
+    <v-container>
+      <v-row>
+        <v-col cols="3" class="pa-2" v-for="item in newAllProduct[0]" :key="item.id">
+          <v-card
+              class="mx-auto"
+              max-width="800"
+              outlined
+              min-height="100%"
+          >
+            <v-img
+                :src="item.images[0]"
+                height="500px"
+                width="281px"
+            />
+            <v-card-title class="justify-center" style="font-size: 18px">
+              {{ item.title }}
+            </v-card-title>
+            <v-card-subtitle class="justify-center">
+              Fiyat : {{ item.price }} $
+            </v-card-subtitle>
+            <v-card-actions class="justify-center">
+              <v-btn
+                  color="deep-purple"
+                  text
+                  left
+                  @click="addProduct(item)"
+              >
+                Sepete ekle
+              </v-btn>
+              <v-spacer/>
+              <v-btn
+                  color="deep-purple"
+                  text
+                  right
+                  @click="removeProduct(item)"
+              >
+                Sil
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
+</template>
+
+<script>
+import clothingBar from "@/components/clothingBar/clothingBar";
+import {mapGetters} from "vuex";
+
+export default {
+  name: "ClothingAndAccessories",
+  components: {
+    clothingBar,
+  },
+  computed: {
+    ...mapGetters({
+      allProduct: 'product/getProduct',
+      newAllProduct: 'product/getNewProduct',
+      BasketProduct: 'shopBar/getProduct'
+    }),
+  },
+  beforeRouteLeave(to, from, next) {
+    this.$store.state.product.newAllProducts = []
+    next()
+  },
+  methods: {
+    addProduct(item) {
+      this.$store.commit('shopBar/addProduct', item)
+    },
+    removeProduct(item) {
+      this.$store.commit('shopBar/removeProduct', item);
+    }
+  }
+
+}
+</script>
+
+<style scoped>
+
+</style>
